@@ -33,7 +33,8 @@ where continent is not null
 order by 1, 2
 
 --------Looking at Total Population vs Vaccination-----------------
-Select dea.date, dea.continent, dea.location, vac.new_vaccinations, SUM(Cast(vac.new_vaccinations as BIGINT)) OVER(Partition by dea.location Order by dea.location, dea.date) as RollingPeopleVaccinated from PortfolioProject..Coviddeaths dea
+Select dea.date, dea.continent, dea.location, vac.new_vaccinations, SUM(Cast(vac.new_vaccinations as BIGINT)) OVER(Partition by dea.location 
+Order by dea.location, dea.date) as RollingPeopleVaccinated from PortfolioProject..Coviddeaths dea
 Join PortfolioProject..CovidVaccinations vac
 On dea.location= vac.location
 and dea.date = vac.date
@@ -43,7 +44,8 @@ order by 2,3
 ------------Use CTE-------------------
 With PopVsVac(Continent, location, population, date, RollingPeopleVaccinated, New_Vaccinations)
 as(
-Select dea.date, dea.population, dea.continent, dea.location, vac.new_vaccinations, SUM(Cast(vac.new_vaccinations as BIGINT)) OVER(Partition by dea.location Order by dea.location, dea.date) as RollingPeopleVaccinated from PortfolioProject..Coviddeaths dea
+Select dea.date, dea.population, dea.continent, dea.location, vac.new_vaccinations, SUM(Cast(vac.new_vaccinations as BIGINT)) 
+  OVER(Partition by dea.location Order by dea.location, dea.date) as RollingPeopleVaccinated from PortfolioProject..Coviddeaths dea
 Join PortfolioProject..CovidVaccinations vac
 On dea.location= vac.location
 and dea.date = vac.date
@@ -64,7 +66,8 @@ RollingPeopleVaccinated numeric
 )
 
 Insert into #PercentPopulationVaccinated
-Select dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, SUM(Cast(vac.new_vaccinations as BIGINT)) OVER(Partition by dea.location Order by dea.location, dea.date) as RollingPeopleVaccinated from PortfolioProject..Coviddeaths dea
+Select dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, SUM(Cast(vac.new_vaccinations as BIGINT)) 
+OVER(Partition by dea.location Order by dea.location, dea.date) as RollingPeopleVaccinated from PortfolioProject..Coviddeaths dea
 Join PortfolioProject..CovidVaccinations vac
 On dea.location= vac.location
 and dea.date = vac.date
@@ -75,7 +78,8 @@ Select *, (RollingPeopleVaccinated/population)* 100 from #PercentPopulationVacci
 
 ------------Creating View------------
 Create view PercentPopulationVaccinated as
-Select dea.date, dea.continent, dea.location, vac.new_vaccinations, SUM(Cast(vac.new_vaccinations as BIGINT)) OVER(Partition by dea.location Order by dea.location, dea.date) as RollingPeopleVaccinated from PortfolioProject..Coviddeaths dea
+Select dea.date, dea.continent, dea.location, vac.new_vaccinations, SUM(Cast(vac.new_vaccinations as BIGINT)) OVER(Partition by dea.location 
+Order by dea.location, dea.date) as RollingPeopleVaccinated from PortfolioProject..Coviddeaths dea
 Join PortfolioProject..CovidVaccinations vac
 On dea.location= vac.location
 and dea.date = vac.date
